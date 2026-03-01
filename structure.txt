@@ -1,0 +1,27 @@
+AYRA_v3/
+├── app.py
+├── requirements.txt
+├── .env
+├── .gitignore
+├── memory.db (auto)
+├── chroma_db/ (auto)
+│
+├── data/
+│   ├── daisy_novel.json
+│   ├── daisy_arkib.json
+│   └── daisy_rahsia.json
+│
+└── utils/
+    ├── __init__.py
+    ├── memory_manager.py
+    ├── chroma_vault.py
+    ├── model_router.py
+    ├── prompts.py
+    ├── mood_detector.py
+    ├── crisis_detector.py
+    ├── proactive_engine.py
+    ├── audit_logger.py
+    ├── consistency_layer.py
+    ├── helpers.py
+    ├── tips_jiji.py
+    └── daisy_loader.py
