@@ -55,106 +55,77 @@ def logout():
 def show_auth_page():
     st.markdown("""
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        * { font-family: 'Inter', sans-serif !important; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; }
 
         .stApp {
-            background-color: #f9f9f9 !important;
+            background-color: #faf9f7 !important;
         }
 
         #MainMenu, footer, header { visibility: hidden; }
-
-        .auth-container {
-            max-width: 400px;
-            margin: 4rem auto 0 auto;
-            padding: 2.5rem;
-            background: #ffffff;
-            border-radius: 16px;
-            border: 1px solid #e8e8e8;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-        }
 
         .auth-logo {
             text-align: center;
             font-size: 2.2rem;
             font-weight: 700;
-            color: #1a1a1a;
+            color: #1c1c1c;
             margin-bottom: 0.25rem;
+            letter-spacing: -0.8px;
         }
 
         .auth-tagline {
             text-align: center;
             font-size: 0.875rem;
-            color: #6b6b6b;
+            color: #888;
             margin-bottom: 2rem;
-        }
-
-        .auth-divider {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 1.25rem 0;
-            color: #aaaaaa;
-            font-size: 0.8rem;
-        }
-
-        .auth-divider::before, .auth-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #e8e8e8;
+            font-weight: 400;
         }
 
         /* Input fields */
         .stTextInput input {
-            background: #f5f5f5 !important;
-            border: 1px solid #e0e0e0 !important;
+            background: #ffffff !important;
+            border: 1px solid #e2dfd9 !important;
             border-radius: 10px !important;
             padding: 12px 14px !important;
             font-size: 0.9rem !important;
-            color: #1a1a1a !important;
+            color: #1c1c1c !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
         }
 
         .stTextInput input:focus {
             border-color: #10a37f !important;
-            box-shadow: 0 0 0 2px rgba(16,163,127,0.15) !important;
+            box-shadow: 0 0 0 3px rgba(16,163,127,0.12) !important;
             background: #ffffff !important;
+        }
+
+        .stTextInput label {
+            color: #555 !important;
+            font-size: 0.82rem !important;
+            font-weight: 500 !important;
         }
 
         /* Primary button */
         .stButton button {
-            background-color: #10a37f !important;
+            background: linear-gradient(135deg, #10a37f, #0d8c6d) !important;
             color: white !important;
             border: none !important;
             border-radius: 10px !important;
             padding: 0.65rem 1.5rem !important;
             font-size: 0.9rem !important;
-            font-weight: 500 !important;
+            font-weight: 600 !important;
             width: 100%;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(16,163,127,0.25) !important;
         }
 
         .stButton button:hover {
-            background-color: #0d8c6d !important;
-        }
-
-        /* Google button override */
-        .google-btn button {
-            background-color: #ffffff !important;
-            color: #1a1a1a !important;
-            border: 1px solid #e0e0e0 !important;
-            border-radius: 10px !important;
-            font-weight: 500 !important;
-        }
-
-        .google-btn button:hover {
-            background-color: #f5f5f5 !important;
-            border-color: #c0c0c0 !important;
+            background: linear-gradient(135deg, #0d8c6d, #0b7a5e) !important;
+            box-shadow: 0 3px 12px rgba(16,163,127,0.35) !important;
         }
 
         /* Tab styling */
         .stTabs [data-baseweb="tab-list"] {
-            background: #f0f0f0 !important;
+            background: #ede9e3 !important;
             border-radius: 10px !important;
             padding: 4px !important;
             gap: 4px !important;
@@ -164,12 +135,12 @@ def show_auth_page():
             border-radius: 8px !important;
             font-size: 0.875rem !important;
             font-weight: 500 !important;
-            color: #6b6b6b !important;
+            color: #888 !important;
         }
 
         .stTabs [aria-selected="true"] {
             background: #ffffff !important;
-            color: #1a1a1a !important;
+            color: #1c1c1c !important;
             box-shadow: 0 1px 4px rgba(0,0,0,0.08) !important;
         }
 
@@ -181,37 +152,22 @@ def show_auth_page():
         .stAlert {
             border-radius: 10px !important;
             font-size: 0.875rem !important;
+            background-color: #f5f3ef !important;
+            border: 1px solid #e8e5e0 !important;
+        }
+
+        /* Center the content */
+        .block-container {
+            max-width: 420px !important;
+            margin: 0 auto !important;
+            padding-top: 4rem !important;
         }
     </style>
     """, unsafe_allow_html=True)
 
-    # Logo
     st.markdown('<div class="auth-logo">✨ AYRA</div>', unsafe_allow_html=True)
     st.markdown('<div class="auth-tagline">Your soulful Malaysian AI companion</div>', unsafe_allow_html=True)
 
-    # Google OAuth button
-    supabase = get_supabase()
-
-    st.markdown('<div class="google-btn">', unsafe_allow_html=True)
-    if st.button("🔵  Continue with Google", key="google_login", use_container_width=True):
-        try:
-            data = supabase.auth.sign_in_with_oauth({
-                "provider": "google",
-                "options": {
-                    "redirect_to": os.environ.get("SUPABASE_REDIRECT_URL", "http://localhost:8501")
-                }
-            })
-            # Redirect user to Google OAuth URL
-            st.markdown(f'<meta http-equiv="refresh" content="0; url={data.url}">', unsafe_allow_html=True)
-            st.stop()
-        except Exception as e:
-            st.error(f"Google login failed: {str(e)}")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # Divider
-    st.markdown('<div class="auth-divider">or continue with email</div>', unsafe_allow_html=True)
-
-    # Email / Password tabs
     tab_login, tab_register = st.tabs(["Sign In", "Create Account"])
 
     with tab_login:
@@ -222,6 +178,7 @@ def show_auth_page():
             if not email or not password:
                 st.error("Please fill in all fields.")
             else:
+                supabase = get_supabase()
                 try:
                     response = supabase.auth.sign_in_with_password({
                         "email": email,
@@ -242,7 +199,7 @@ def show_auth_page():
 
         st.markdown("""
         <div style="text-align:center; margin-top: 0.75rem;">
-            <span style="font-size: 0.8rem; color: #6b6b6b;">Forgot your password? </span>
+            <span style="font-size: 0.8rem; color: #888;">Forgot your password? </span>
             <span style="font-size: 0.8rem; color: #10a37f; cursor: pointer;">Reset it</span>
         </div>
         """, unsafe_allow_html=True)
@@ -261,6 +218,7 @@ def show_auth_page():
             elif reg_pass != reg_pass2:
                 st.error("Passwords don't match.")
             else:
+                supabase = get_supabase()
                 try:
                     response = supabase.auth.sign_up({
                         "email": reg_email,
@@ -278,39 +236,19 @@ def show_auth_page():
                     else:
                         st.error(f"Registration failed: {str(e)}")
 
-    # Footer
     st.markdown("""
-    <div style="text-align:center; margin-top: 2rem; font-size: 0.75rem; color: #aaaaaa;">
-        ATMA AI · AYRA v3.1 · Your data is private & secure 🔒
+    <div style="text-align:center; margin-top: 2rem; font-size: 0.75rem; color: #bbb;">
+        ATMA AI · AYRA v3.3 · Your data is private & secure 🔒
     </div>
     """, unsafe_allow_html=True)
 
 
 # -------------------------------------------------------------------
-# OAuth callback handler — call this at TOP of app.py
+# OAuth callback handler — kept as stub (Google OAuth disabled)
 # -------------------------------------------------------------------
 def handle_oauth_callback():
-    """
-    Handles Google OAuth redirect. Streamlit gets the token
-    via URL query params after Google redirects back.
-    """
-    params = st.query_params
-    
-    if "code" in params:
-        supabase = get_supabase()
-        try:
-            # Exchange code for session
-            response = supabase.auth.exchange_code_for_session({
-                "auth_code": params["code"]
-            })
-            st.session_state.user = response.user
-            st.session_state.access_token = response.session.access_token
-            # Clean URL
-            st.query_params.clear()
-            st.rerun()
-        except Exception as e:
-            st.error(f"OAuth error: {str(e)}")
-            st.query_params.clear()
+    """Google OAuth disabled. Stub kept for compatibility."""
+    pass
 
 
 # -------------------------------------------------------------------
