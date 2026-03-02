@@ -52,7 +52,7 @@ user_id = get_user_id()
 user_email = get_user_email()
 
 if "memory" not in st.session_state:
-    st.session_state.memory = MemoryManager(user_id=user_id)
+    st.session_state.memory = MemoryManager()
 if "mood" not in st.session_state:
     st.session_state.mood = MoodDetector()
 if "router" not in st.session_state:
