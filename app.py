@@ -4,6 +4,12 @@ from datetime import datetime
 from dotenv import load_dotenv
 import os
 import threading
+from zoneinfo import ZoneInfo
+
+MYT = ZoneInfo("Asia/Kuala_Lumpur")
+
+def now_myt():
+    return datetime.now(MYT)
 
 from utils.memory_manager import MemoryManager
 from utils.mood_detector import MoodDetector
