@@ -100,6 +100,26 @@ st.markdown("""
         color: #1a1a1a !important;
     }
 
+    /* Hide sidebar toggle button label — all possible selectors */
+    [data-testid="stSidebarCollapseButton"] span { display: none !important; }
+    [data-testid="collapsedControl"] span { display: none !important; }
+    [data-testid="stSidebarCollapseButton"] { 
+        width: 2rem !important;
+        overflow: hidden !important;
+    }
+    [data-testid="collapsedControl"] {
+        width: 2rem !important;
+        overflow: hidden !important;
+    }
+    /* Nuclear option — hide the text node inside any sidebar button */
+    section[data-testid="stSidebar"] ~ div button span,
+    section[data-testid="stSidebar"] ~ div span,
+    div[data-testid="collapsedControl"] > button > span { 
+        font-size: 0 !important;
+        visibility: hidden !important;
+        display: none !important;
+    }
+
     /* Hide streamlit default chrome */
     #MainMenu { visibility: hidden; }
     header[data-testid="stHeader"] { background: transparent !important; }
