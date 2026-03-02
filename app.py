@@ -213,7 +213,7 @@ st.markdown("""
     }
 
     .sidebar-brand-name {
-        font-size: 1rem;
+        font-size: 2rem;
         font-weight: 600;
         color: #1a1a1a;
     }
