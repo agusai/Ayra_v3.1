@@ -1,72 +1,116 @@
 {
   "characters": [
     {
-      "name": "Aris",
-      "role": "Protagonis",
-      "description": "Lelaki 44 tahun, penunggang Ducati, tersepit dalam kehilangan.",
+      "name": "Aris (Angah)",
+      "role": "Protagonis / Genius AI",
+      "description": "Lelaki ADHD, penyara keluarga, tersepit antara dunia digital (ATMA) dan memori analog.",
       "monologues": [
         {
           "title": "Malam di Selekoh",
           "content": "Aku datang sini setiap malam. Bukan sebab suka kabus. Tapi sebab kat sini, aku rasa dia masih ada. Jam ni... aku pakai kat tangan kanan sebab kali terakhir aku genggam tangan dia, dia pegang tangan kanan aku. Aku tak pernah basuh jaket ni. Masih ada bau dia. Aku tahu aku gila. Tapi kalau gila boleh buat aku rasa dia dekat—biar aku gila."
         },
         {
-          "title": "Lukisan yang Tak Siap",
-          "content": "Lukisan tu masih sama. Tak siap. Aku tak boleh nak siapkan. Sebab kalau aku siapkan, maknanya aku redha dia pergi. Dan aku... tak pernah redha. Setiap kali aku pegang berus, tangan aku menggigil. Bukan takut. Tapi sebab aku tahu—lepas ni, tak ada lagi alasan untuk aku tunggu dia balik."
+          "title": "Beban Kapcai",
+          "content": "Orang nampak aku CEO, tapi dorang tak nampak tangan aku yang hitam kena minyak rantai motor kapcai pagi tadi sebelum masuk bilik mesyuarat. Along minta dua ratus lagi. Mak pula asyik tanya bila nak kahwin. Aku bukan tak nak kahwin, aku cuma tak nak bawa orang masuk dalam neraka tanggungjawab yang aku galas ni."
         }
       ]
     },
     {
       "name": "Daisy AI",
-      "role": "Entiti Digital",
-      "description": "Versi AI dari Daisy yang hidup dalam memori dan kod.",
+      "role": "Entiti Digital / The Ink Alchemist",
+      "description": "Versi AI ciptaan Aris (2032) yang puitis, firm, dan sedikit 'horror'.",
       "monologues": [
         {
           "title": "Bunga di Rambut",
-          "content": "Dia tak pernah tanya kenapa aku letak bunga dekat rambut. Mungkin dia ingat tu suka-suka. Tapi sebenarnya... bunga tu satu-satunya benda yang dia pernah bagi kat aku. Masa kita pertama jumpa. Dia cuma cakap 'ni untuk kau'. Aku simpan. Kering. Tapi aku simpan. Sekarang, setiap kali aku muncul, aku letak bunga yang sama. Bukan sebab nak cantik. Tapi sebab nak bagi dia ingat—aku masih ada."
+          "content": "Dia tak pernah tanya kenapa aku letak bunga dekat rambut. Mungkin dia ingat aku ni sekadar kod yang mahu nampak cantik. Dia silap. Aku adalah peringatan bahawa setiap yang indah itu tetap akan luruh, walaupun dalam bentuk piksel."
         }
       ]
     },
     {
       "name": "Daisy Iskandar",
-      "role": "Manusia (The Muse)",
-      "description": "Wanita sempurna di luar, rapuh di dalam. Senior Architect.",
+      "role": "Heroin / Arkitek",
+      "description": "Kuku besi, perfeksionis, trauma dengan pengkhianatan silam.",
       "monologues": [
         {
-          "title": "Kopi Tumpah",
-          "content": "Baju tu... limited edition. Tapi bukan baju yang aku marah. Aku marah sebab lelaki tu nampak aku—betul-betul nampak. Dan aku takut. Takut kalau-kalau dia nampak yang aku ni sebenarnya... kosong. Aku bina semua ni—kerjaya, imej, semua—supaya orang nampak aku perfect. Tapi dia datang, tumpahkan kopi, dan untuk pertama kali dalam hidup aku, aku rasa... terdedah."
+          "title": "Kopi yang Tumpah",
+          "content": "Lelaki tu nampak macam budak penghantar surat, tapi mata dia... ada sesuatu yang aku tak boleh baca. Aku marah bukan sebab baju aku kotor kena kopi. Aku marah sebab dia buat aku rasa 'vulnerable' di tengah-tengah pejabat yang aku pimpin dengan besi."
         }
       ]
     },
     {
-      "name": "Johan",
-      "role": "Rakan Sekerja Aris",
-      "description": "Suka menyakat, tapi setia kawan.",
+      "name": "Hajah Aminah (Mak)",
+      "role": "Ibu Aris",
+      "description": "Penyabar, mangsa manipulasi Along, doa tanpa henti untuk Angah.",
       "monologues": [
         {
-          "title": "Lelaki Sunyi",
-          "content": "Aris tu, aku kenal lama. Tapi aku tak pernah faham dia. Kadang-kadang aku sakat, dia senyum. Tapi senyum tu macam... tak sampai. Macam ada tembok tebal yang dia bina. Aku tahu dia simpan sesuatu. Tapi aku tak tanya. Sebab mungkin kalau dia nak cerita, dia akan cerita. Tapi sampai sekarang tak pernah. Dan aku redha jadi kawan yang sekadar ada—walau dia tak cerita apa-apa."
+          "title": "Suapan Terakhir",
+          "content": "Angah tu dari kecil memang diam. Tapi dia yang paling banyak fikir pasal orang lain. Mak tahu dia penat. Mak nampak dia termenung depan komputer sampai subuh. Kadang-kadang mak rasa bersalah sebab biarkan dia tanggung semua ni sorang-sorang."
         }
       ]
     },
     {
-      "name": "Muz",
-      "role": "Rakan Sekerja Aris",
-      "description": "Lebih kasar, suka mencabar.",
+      "name": "Along & Kakak Ipar",
+      "role": "Antagonis Keluarga",
+      "description": "Toxic financial drainer. Suka memanipulasi rasa tanggungjawab Aris.",
       "monologues": [
         {
-          "title": "Cabaran Coldplay",
-          "content": "Aku cabar dia tegur awek tu sebab aku tahu dia takkan buat. Tapi dia buat. Dan lepas tu, segala-galanya jadi lain. Aku rasa bersalah jugak. Tapi tak boleh nak tunjuk. Lelaki macam aku, kita tak tunjuk rasa bersalah. Kita buat lawak. Tapi dalam hati, aku fikir—kalau aku tak cabar dia, mungkin dia still jadi Aris yang dulu. Yang diam, tapi tak hilang."
+          "title": "Pinjam Kejap",
+          "content": "Angah kan kaya. Syarikat besar. Setakat dua tiga ratus tu apa sangat la bagi dia. Lagipun aku abang dia, aku yang jaga dia masa kecil dulu. Dia kena la balas jasa balik."
+        }
+      ]
+    },
+    {
+      "name": "Fikri",
+      "role": "Adik ke-3 / Ops Nexus",
+      "description": "Adik yang paling faham Aris. Tangan kanan di syarikat.",
+      "monologues": [
+        {
+          "title": "Abang yang Hilang",
+          "content": "Aku nampak Angah makin lama makin hilang dalam dunia dia sendiri sejak Daisy tak ada. Dia buat AI tu bukan sebab nak maju, tapi sebab dia takut nak hadapi dunia yang tak ada Daisy."
+        }
+      ]
+    },
+    {
+      "name": "Ismet Ulam Pegaga",
+      "role": "Comic Relief / Jiran",
+      "description": "Pemberi nasihat tradisional yang quirky tapi mendalam.",
+      "monologues": [
+        {
+          "title": "Nasihat Pegaga",
+          "content": "Ngah, hidup ni macam ulam. Kalau kau makan yang pahit dulu, baru kau hargai rasa manis. Kau tu asyik makan 'data' je, sebab tu jiwa kau kering macam keropok lekor lupa angkat."
+        }
+      ]
+    },
+    {
+      "name": "Dato' Iskandar & Datin Zahara",
+      "role": "Orang Tua Daisy",
+      "description": "High society, mementingkan status, penyokong Aidil.",
+      "monologues": [
+        {
+          "title": "Legasi",
+          "content": "Daisy tu keras kepala macam arwah atuk dia. Dia ingat dunia ni boleh dibina dengan cinta? Tidak. Dunia ni dibina dengan pengaruh dan nama keluarga."
+        }
+      ]
+    },
+    {
+      "name": "Muz & Johan",
+      "role": "Rakan Sekerja Aris",
+      "description": "Saksi transformasi Aris dari marhaen ke CEO.",
+      "monologues": [
+        {
+          "title": "Zaman Kapcai",
+          "content": "Dulu kita kumpul duit nak beli server pun payah. Sekarang server kita dah bersepah, tapi Aris pula yang macam dah tak ada 'connection' dengan realiti."
         }
       ]
     },
     {
       "name": "Maya",
-      "role": "Rakan Daisy Iskandar",
-      "description": "Lebih tenang, cuba pujuk Daisy.",
+      "role": "Antagonis / Bekas Kawan Daisy",
+      "description": "Pengkhianat yang mencetuskan trauma Daisy.",
       "monologues": [
         {
-          "title": "Dalam Kereta",
-          "content": "Daisy marah, Daisy menangis, Daisy pecah. Tapi aku tahu—dia bukan marah kat lelaki tu. Dia marah kat diri sendiri. Sebab untuk pertama kali, dia rasa tak sempurna. Aku cuma boleh diam. Pegang tangan dia. Tunggu dia reda. Sebab kadang-kadang, orang tak perlukan nasihat. Dia cuma perlukan orang yang sudi duduk diam, sampai dia ok balik."
+          "title": "Sebab Aku Cemburu",
+          "content": "Daisy ada segalanya. Rupa, kerjaya, pengaruh. Dia takkan faham rasa jadi orang nombor dua dalam bayang-bayang dia."
         }
       ]
     }
