@@ -107,13 +107,24 @@ st.markdown("""
     }
 
 
+    /* Hide sidebar toggle text — keep button visible */
+    [data-testid="stSidebarCollapseButton"] span { 
+        font-size: 0 !important; 
+        color: transparent !important;
+    }
+    [data-testid="collapsedControl"] span { 
+        font-size: 0 !important; 
+        color: transparent !important;
+    }
+
     /* Hide streamlit default chrome */
     #MainMenu { visibility: hidden; }
     header[data-testid="stHeader"] { background: transparent !important; }
     footer { visibility: hidden !important; }
 
-    /* Hide Streamlit top-right toolbar only */
+    /* Hide Streamlit top-right toolbar (Share, star, pencil, github) */
     [data-testid="stToolbar"] { display: none !important; }
+    [data-testid="stDecoration"] { display: none !important; }
     [data-testid="stStatusWidget"] { display: none !important; }
     .stDeployButton { display: none !important; }
 
