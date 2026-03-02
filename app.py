@@ -106,16 +106,37 @@ st.markdown("""
         color: #1a1a1a !important;
     }
 
+    /* Hide sidebar toggle button label — all possible selectors */
+    [data-testid="stSidebarCollapseButton"] span { display: none !important; }
+    [data-testid="collapsedControl"] span { display: none !important; }
+    [data-testid="stSidebarCollapseButton"] { 
+        width: 2rem !important;
+        overflow: hidden !important;
+    }
+    [data-testid="collapsedControl"] {
+        width: 2rem !important;
+        overflow: hidden !important;
+    }
+    /* Nuclear option — hide the text node inside any sidebar button */
+    section[data-testid="stSidebar"] ~ div button span,
+    section[data-testid="stSidebar"] ~ div span,
+    div[data-testid="collapsedControl"] > button > span { 
+        font-size: 0 !important;
+        visibility: hidden !important;
+        display: none !important;
+    }
 
     /* Hide streamlit default chrome */
     #MainMenu { visibility: hidden; }
     header[data-testid="stHeader"] { background: transparent !important; }
     footer { visibility: hidden !important; }
 
-    /* Hide Streamlit top-right toolbar only */
+    /* Hide Streamlit top-right toolbar (Share, star, pencil, github) */
     [data-testid="stToolbar"] { display: none !important; }
+    [data-testid="stDecoration"] { display: none !important; }
     [data-testid="stStatusWidget"] { display: none !important; }
     .stDeployButton { display: none !important; }
+    #stDecoration { display: none !important; }
 
     /* Tighten sidebar button spacing */
     [data-testid="stSidebar"] .stButton {
@@ -125,7 +146,6 @@ st.markdown("""
         padding: 0.4rem 0.75rem !important;
         margin-bottom: 0 !important;
     }
-
 
     /* ===== MAIN CONTENT AREA ===== */
     .main .block-container {
