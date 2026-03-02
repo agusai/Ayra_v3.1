@@ -4,12 +4,6 @@ from datetime import datetime
 from dotenv import load_dotenv
 import os
 import threading
-from zoneinfo import ZoneInfo
-
-MYT = ZoneInfo("Asia/Kuala_Lumpur")
-
-def now_myt():
-    return datetime.now(MYT)
 
 from utils.memory_manager import MemoryManager
 from utils.mood_detector import MoodDetector
@@ -44,7 +38,7 @@ if not is_logged_in():
 # Helper function untuk time period
 # -------------------------------------------------------------------
 def get_time_period():
-    hour = now_myt().hour
+    hour = datetime.now().hour
     if 5 <= hour < 12: return "pagi"
     elif 12 <= hour < 15: return "tengah hari"
     elif 15 <= hour < 19: return "petang"
@@ -106,26 +100,10 @@ st.markdown("""
         color: #1a1a1a !important;
     }
 
-
     /* Hide streamlit default chrome */
     #MainMenu { visibility: hidden; }
     header[data-testid="stHeader"] { background: transparent !important; }
     footer { visibility: hidden !important; }
-
-    /* Hide Streamlit top-right toolbar only */
-    [data-testid="stToolbar"] { display: none !important; }
-    [data-testid="stStatusWidget"] { display: none !important; }
-    .stDeployButton { display: none !important; }
-
-    /* Tighten sidebar button spacing */
-    [data-testid="stSidebar"] .stButton {
-        margin-bottom: 0.1rem !important;
-    }
-    [data-testid="stSidebar"] .stButton button {
-        padding: 0.4rem 0.75rem !important;
-        margin-bottom: 0 !important;
-    }
-
 
     /* ===== MAIN CONTENT AREA ===== */
     .main .block-container {
@@ -687,7 +665,7 @@ with st.sidebar:
     st.markdown('<hr>', unsafe_allow_html=True)
 
     # ── Time info ──
-    now = now_myt()
+    now = datetime.now()
     st.markdown(f"""
     <div style="padding: 0.5rem 0.75rem;">
         <div style="font-size: 0.75rem; color: #6b6b6b;">{get_time_period().upper()} · {now.strftime('%d %b %Y')}</div>
@@ -885,7 +863,7 @@ if prompt := st.chat_input(
                 full_context = context + [{"role": "system", "content": mood_prompt + mem_text}]
                 
                 # Profile
-                now = now_myt()
+                now = datetime.now()
                 profile = {
                     "name": st.session_state.memory.get_profile("name") or "Awak",
                     "current_time": now.strftime("%I:%M %p"),
