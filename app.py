@@ -44,7 +44,7 @@ if not is_logged_in():
 # Helper function untuk time period
 # -------------------------------------------------------------------
 def get_time_period():
-    hour = datetime.now().hour
+    hour = now_myt().hour
     if 5 <= hour < 12: return "pagi"
     elif 12 <= hour < 15: return "tengah hari"
     elif 15 <= hour < 19: return "petang"
@@ -379,6 +379,29 @@ st.markdown("""
 
     .stApp h1, .stApp h2, .stApp h3 { color: #1a1a1a !important; }
     .stMarkdown { color: #1a1a1a; }
+
+    /* ===== HIDE SIDEBAR COLLAPSE BUTTON TEXT ===== */
+    [data-testid="collapsedControl"] span,
+    button[data-testid="baseButton-headerNoPadding"] span,
+    [data-testid="stSidebarCollapseButton"] span,
+    [data-testid="stSidebarCollapsedControl"] span {
+        display: none !important;
+    }
+    /* Hide the keyboard_double_arrow text that appears on collapse button */
+    [data-testid="stSidebar"] ~ div button span,
+    .st-emotion-cache-1dp5vir span { display: none !important; }
+
+    /* ===== TIGHTEN SIDEBAR BUTTON SPACING ===== */
+    [data-testid="stSidebar"] .stButton {
+        margin-bottom: 0.1rem !important;
+    }
+    [data-testid="stSidebar"] .stButton button {
+        margin-bottom: 0.1rem !important;
+        padding: 0.4rem 0.75rem !important;
+    }
+    [data-testid="stSidebar"] .row-widget {
+        margin-bottom: 0.1rem !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -671,7 +694,7 @@ with st.sidebar:
     st.markdown('<hr>', unsafe_allow_html=True)
 
     # ── Time info ──
-    now = datetime.now()
+    now = now_myt()
     st.markdown(f"""
     <div style="padding: 0.5rem 0.75rem;">
         <div style="font-size: 0.75rem; color: #6b6b6b;">{get_time_period().upper()} · {now.strftime('%d %b %Y')}</div>
@@ -869,7 +892,7 @@ if prompt := st.chat_input(
                 full_context = context + [{"role": "system", "content": mood_prompt + mem_text}]
                 
                 # Profile
-                now = datetime.now()
+                now = now_myt()
                 profile = {
                     "name": st.session_state.memory.get_profile("name") or "Awak",
                     "current_time": now.strftime("%I:%M %p"),
