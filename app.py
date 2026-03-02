@@ -626,7 +626,7 @@ with st.sidebar:
     qm1, qm2 = st.columns(2)
     with qm1:
         st.markdown('<div class="quick-mode-btn">', unsafe_allow_html=True)
-        if st.button("🔍 Tech", key="sb_tech", use_container_width=True):
+        if st.button("🔍 Jiji's Mode", key="sb_tech", use_container_width=True):
             st.session_state.chat_mode = "jiji"
             greeting = """Heh. Jiji kat sini.\n\nAYRA bagi laluan kejap — dia tahu Uncle nak jumpa korang.\n\nKau nak Uncle cerita apa?\n1. 🔍 Rahsia data\n2. 📖 Cerita sains santai\n3. 💡 Develop idea\n4. 🤔 Renungan dari kod\n5. 💬 Tanya apa-aja\n\nCakap nombor je. Uncle dengar."""
             if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
@@ -636,9 +636,9 @@ with st.sidebar:
         st.markdown('</div>', unsafe_allow_html=True)
     with qm2:
         st.markdown('<div class="quick-mode-btn">', unsafe_allow_html=True)
-        if st.button("🧭 Guide", key="sb_guide", use_container_width=True):
+        if st.button("🧭 Fikri's Mode", key="sb_guide", use_container_width=True):
             st.session_state.chat_mode = "fikri"
-            greeting = """Waalaikumsalam. Fikri di sini.\n\nFikri sini untuk:\n• Bantu cari ARAH bila sesat 🎯\n• Tanya SOALAN yang kuatkan 🤔\n• TIMBANG pilihan dengan bijak ⚖️\n\nAwak ada soalan? Cerita je. Fikri dengar dulu.\n\n— Fikri 🧭"""
+            greeting = """Hai. Fikri di sini.\n\nFikri sini untuk:\n• Bantu cari ARAH bila sesat 🎯\n• Tanya SOALAN yang kuatkan 🤔\n• TIMBANG pilihan dengan bijak ⚖️\n\nAwak ada soalan? Cerita je. Fikri dengar dulu.\n\n— Fikri 🧭"""
             if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
                 st.session_state.chat_history.append({"role": "assistant", "content": greeting})
             st.rerun()
@@ -647,7 +647,7 @@ with st.sidebar:
     qm3, qm4 = st.columns(2)
     with qm3:
         st.markdown('<div class="quick-mode-btn">', unsafe_allow_html=True)
-        if st.button("🍎 Soul", key="sb_soul", use_container_width=True):
+        if st.button("🍎 MaYa's Mode", key="sb_soul", use_container_width=True):
             st.session_state.chat_mode = "maya"
             st.session_state.mood_score = 100
             greeting = """Selamat datang ke teras ATMA. 👑\n\nSaya MaYa. Di sini kita bercakap tentang **Jiwa, Adab, dan Cinta**.\n\nCeritakan pada saya. Saya di sini untuk menemani awak.\n\n— MaYa 🍎"""
@@ -657,7 +657,7 @@ with st.sidebar:
         st.markdown('</div>', unsafe_allow_html=True)
     with qm4:
         st.markdown('<div class="quick-mode-btn">', unsafe_allow_html=True)
-        if st.button("✨ Creative", key="sb_creative", use_container_width=True):
+        if st.button("✨ Daisy's Mode", key="sb_creative", use_container_width=True):
             st.session_state.daisy_state = "menu"
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
