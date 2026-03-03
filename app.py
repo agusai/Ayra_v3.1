@@ -722,9 +722,7 @@ with st.sidebar:
         st.markdown('</div>', unsafe_allow_html=True)
     with qm4:
         st.markdown('<div class="quick-mode-btn">', unsafe_allow_html=True)
-        # Nama kekal Creative, Logik panggil Daisy
         if st.button("✨ Creative", key="sb_creative", use_container_width=True):
-            st.session_state.daisy_state = "menu"
             st.session_state.chat_mode = "daisy" # Pastikan avatar Daisy keluar
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
