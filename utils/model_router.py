@@ -188,3 +188,29 @@ End with: — Fikri 🧭
                 return response.text
         except Exception as e:
             return "Maaf, litar jiwa saya perlu rehat sebentar. Panggil saya lagi nanti ya? — MaYa 🍎"
+    
+    
+    # ==========================================================
+    # DAISY (THE INK ALCHEMIST - EXPERIMENTAL)
+    # ==========================================================
+    def call_daisy(self, user_input, context=""):
+        try:
+            # Gunakan Gemini 2.0 Flash Experimental untuk kualiti puitis terbaik
+            daisy_model = genai.GenerativeModel("gemini-2.0-flash-exp")
+            
+            # Gabungkan System Prompt dengan data dari JSON
+            full_prompt = f"""
+{DAISY_SYSTEM_PROMPT}
+
+CONTEXT NOVEL:
+{context}
+
+USER INPUT:
+{user_input}
+
+Respond as Daisy. Keep it soulful, poetic, and slightly cheeky.
+"""
+            response = daisy_model.generate_content(full_prompt)
+            return response.text
+        except Exception as e:
+            return f"Alamak Kanda, 'tinta' Daisy kering sekejap. Error: {str(e)}"
