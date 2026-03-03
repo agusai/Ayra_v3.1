@@ -200,7 +200,7 @@ End with: — Fikri 🧭
     def call_daisy(self, user_input, context=""):
         try:
             # Gunakan Gemini 2.0 Flash Experimental untuk kualiti puitis terbaik
-            daisy_model = genai.GenerativeModel("gemini-2.0-flash-exp")
+            daisy_model = genai.GenerativeModel("gemini-2.5-flash-lite")
             
             # Gabungkan System Prompt dengan data dari JSON
             full_prompt = f"""
