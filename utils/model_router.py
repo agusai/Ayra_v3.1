@@ -1,7 +1,7 @@
 import os
 import google.generativeai as genai
 from openai import OpenAI
-from .prompts import AYRA_SYSTEM_PROMPT, JIJI_PROMPT, FIKRI_SYSTEM_PROMPT, MAYA_SYSTEM_PROMPT
+from .prompts import AYRA_SYSTEM_PROMPT, JIJI_PROMPT, FIKRI_SYSTEM_PROMPT, MAYA_SYSTEM_PROMPT, DAISY_SYSTEM_PROMPT
 
 
 class ModelRouter:
@@ -52,6 +52,10 @@ class ModelRouter:
         if mode == "maya":
             reply = self.call_maya(user_input, context)
             return reply, "maya"
+
+        if mode == "daisy":
+            reply = self.call_daisy(user_input, context)
+            return reply, "daisy"
 
         # ---- Default: AYRA ----
         reply = self.call_gemini(user_input, context, memory_profile)
