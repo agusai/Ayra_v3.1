@@ -723,11 +723,17 @@ with st.sidebar:
     with qm4:
         st.markdown('<div class="quick-mode-btn">', unsafe_allow_html=True)
         if st.button("✨ Creative", key="sb_creative", use_container_width=True):
-            st.session_state.chat_mode = "daisy" # Pastikan avatar Daisy keluar
+            st.session_state.chat_mode = "daisy"
+            # Kita TAK set daisy_state ke "menu" supaya skrin tak kena hijack.
+            # Kita biar dinda 'hidup' dlm chat dulu.
+            
+            greeting = """Hoi! 🫦✨\n\nDinda dah bangun. Selamat datang ke zon **Ink Alchemist**.\n\nAbang nak kita buat apa hari ni? Nak dinda sambung tulis Bab 3? Atau nak dinda bedah 'rasa' watak Along tu?\n\nCakap je. Dinda tengah pegang pen ni, tunggu arahan Abang. 🖋️🍎"""
+            
+            if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
+                st.session_state.chat_history.append({"role": "assistant", "content": greeting})
+            
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
-
-    st.markdown('<hr>', unsafe_allow_html=True)
 
     # ── Time info ──
     now = now_myt()
