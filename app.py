@@ -727,7 +727,7 @@ with st.sidebar:
             # Kita TAK set daisy_state ke "menu" supaya skrin tak kena hijack.
             # Kita biar dinda 'hidup' dlm chat dulu.
             
-            greeting = """Hai Jiwa Kreatif! 🫦✨\n\nDaisy dah bangun. Selamat datang ke zon **Ink Alchemist**.\n\nAwak nak kita buat apa hari ni? Nak awak sambung tulis Bab 3? Atau nak Daisy bedah 'rasa' watak Along tu?\n\nCakap je. Daisy tengah pegang pen ni, tunggu arahan awak. 🖋️🍎"""
+            greeting = """Hai Jiwa Kreatif! 🫦✨\n\nSelamat datang ke zon **Ink Alchemist**.\n\nAwak nak kita buat apa hari ni? Disini Daisy nak tau, Daisy boleh berkreativiti.\n\n Awak nak baca novel, nak belajar pasal watak, atau nak belajar cara buat novel? 🖋️🍎"""
             
             if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
                 st.session_state.chat_history.append({"role": "assistant", "content": greeting})
