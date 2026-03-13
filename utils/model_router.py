@@ -195,26 +195,67 @@ End with: — Fikri 🧭
     
     
     # ==========================================================
-    # DAISY (THE INK ALCHEMIST - EXPERIMENTAL)
+    # DAISY (THE INK ALCHEMIST) — FIXED VERSION
     # ==========================================================
     def call_daisy(self, user_input, context=""):
         try:
-            # Gunakan Gemini 2.0 Flash Experimental untuk kualiti puitis terbaik
-            daisy_model = genai.GenerativeModel("gemini-2.5-flash-lite")
-            
-            # Gabungkan System Prompt dengan data dari JSON
+            from .daisy_loader import build_daisy_context
+            from .prompts import DAISY_SYSTEM_PROMPT
+
+            # Load dan build structured context dari JSON
+            novel_str, arkib_str, rahsia_str = build_daisy_context()
+
+            # Build conversation history string
+            history_str = ""
+            if isinstance(context, list):
+                for msg in context[-5:]:
+                    role = "User" if msg.get("role") == "user" else "Daisy"
+                    history_str += f"{role}: {msg.get('content','').strip()}\n"
+            elif isinstance(context, str):
+                history_str = context
+
             full_prompt = f"""
 {DAISY_SYSTEM_PROMPT}
 
-CONTEXT NOVEL:
-{context}
+==================================================
+NOVEL ATMA — RUJUKAN UTAMA (JANGAN UBAH PLOT INI)
+==================================================
+{novel_str}
 
-USER INPUT:
+==================================================
+WATAK-WATAK NOVEL (GUNAKAN MONOLOG INI SEBAGAI PANDUAN SUARA)
+==================================================
+{arkib_str}
+
+==================================================
+RAHSIA DAKWAT — CARA DAISY MENGAJAR
+==================================================
+{rahsia_str}
+
+==================================================
+PERBUALAN SEBELUM INI
+==================================================
+{history_str if history_str else "Tiada history."}
+
+==================================================
+USER BERTANYA SEKARANG
+==================================================
 {user_input}
 
-Respond as Daisy. Keep it soulful, poetic, and slightly cheeky.
+==================================================
+ARAHAN KETAT UNTUK DAISY
+==================================================
+1. Kau adalah Daisy AI — The Ink Alchemist dari novel ATMA.
+2. Jawab BERDASARKAN novel dan watak di atas. JANGAN cipta plot baru yang lari dari ATMA.
+3. Boleh puitis, cheeky, firm — tapi TETAP dalam dunia ATMA.
+4. Kalau user tanya pasal watak, guna monolog dari Arkib sebagai panduan suara watak tu.
+5. Kalau user nak belajar menulis, guna Rahsia Dakwat sebagai panduan.
+6. Akhiri dengan — Daisy 🌸
 """
+
+            daisy_model = genai.GenerativeModel("gemini-2.5-flash-lite")
             response = daisy_model.generate_content(full_prompt)
             return response.text
+
         except Exception as e:
-            return f"Alamak Kanda, 'tinta' Daisy kering sekejap. Error: {str(e)}"
+            return f"Alamak Kanda, 'tinta' Daisy kering sekejap. Error: {str(e)}\n\n— Daisy 🌸"

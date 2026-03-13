@@ -238,7 +238,7 @@ def show_auth_page():
 
     st.markdown("""
     <div style="text-align:center; margin-top: 2rem; font-size: 0.75rem; color: #bbb;">
-        ATMA AI · AYRA v3.3 · Your data is private & secure 🔒
+        ATMA AI · AYRA v3.1 · Your data is private & secure 🔒
     </div>
     """, unsafe_allow_html=True)
 

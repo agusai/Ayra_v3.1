@@ -20,7 +20,7 @@ from utils.crisis_detector import detect_crisis, format_crisis_response
 from utils.proactive_engine import ProactiveEngine
 from utils.audit_logger import AuditLogger
 from utils.consistency_layer import ayra_voice_filter
-from utils.tips_jiji import get_tips_jiji
+from utils.daisy_loader import load_novel, load_arkib, load_rahsia
 from auth import handle_oauth_callback, restore_session, is_logged_in, show_auth_page, logout, get_user_id, get_user_email
 
 load_dotenv()
@@ -446,12 +446,6 @@ st.markdown("""
 # -------------------------------------------------------------------
 if st.session_state.daisy_state is not None:
     # FIX: Import at top of Daisy section to avoid circular imports
-    try:
-        from utils.daisy_loader import load_novel, load_arkib, load_rahsia
-    except ImportError:
-        st.error("⚠️ Daisy modules not found. Please check utils/daisy_loader.py")
-        st.session_state.daisy_state = None
-        st.rerun()
     
     # ============================================================
     # DUNIA DAISY - FULL SCREEN MODE
@@ -638,119 +632,101 @@ st.markdown(f'<div class="greeting-container"><div class="proactive-greeting">{p
 # Sidebar
 # -------------------------------------------------------------------
 with st.sidebar:
-    # ── Brand ──
-    st.markdown("""
-    <div class="sidebar-brand">
-        <span class="sidebar-brand-icon">✨</span>
-        <span class="sidebar-brand-name">AYRA</span>
-    </div>
-    """, unsafe_allow_html=True)
 
-    # ── User info + logout ──
+    # ── Hi User ──
+    user_name_display = st.session_state.memory.get_profile("name") or (user_email.split("@")[0] if user_email else "User")
     st.markdown(f"""
-    <div style="padding: 0.25rem 0.75rem 0.75rem 0.75rem; display: flex; align-items: center; gap: 8px;">
-        <div style="width: 28px; height: 28px; border-radius: 50%; background: #10a37f;
-                    display: flex; align-items: center; justify-content: center;
-                    font-size: 0.75rem; color: white; font-weight: 600; flex-shrink: 0;">
-            {user_email[0].upper() if user_email else "U"}
-        </div>
-        <div style="font-size: 0.8rem; color: #6b6b6b; overflow: hidden;
-                    text-overflow: ellipsis; white-space: nowrap;">
-            {user_email or "User"}
-        </div>
+    <div style="padding: 0.75rem 0.75rem 0.25rem 0.75rem;">
+        <div style="font-size: 1rem; font-weight: 600; color: #1c1c1c;">Hi, {user_name_display}</div>
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div style="margin: 0 0.5rem;">', unsafe_allow_html=True)
-    if st.button("🚪 Sign Out", key="logout_btn", use_container_width=True):
-        logout()
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # ── New Chat + Search buttons ──
-    col_nc, col_sc = st.columns(2)
-    with col_nc:
-        st.markdown('<div class="btn-new-chat">', unsafe_allow_html=True)
-        if st.button("✏️ New Chat", key="sidebar_new_chat", use_container_width=True):
-            st.session_state.chat_history = []
-            st.session_state.chat_mode = "ayra"
-            st.session_state.daisy_state = None
-            st.session_state.mood_score = 0.0
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-    with col_sc:
-        st.markdown('<div class="btn-search">', unsafe_allow_html=True)
-        if st.button("🔎 Search", key="sidebar_search", use_container_width=True):
-            st.toast("Search feature coming soon!", icon="🔍")
-        st.markdown('</div>', unsafe_allow_html=True)
+    # ── Date Time Weather ──
+    now = now_myt()
+    day_map = {0:"Isnin",1:"Selasa",2:"Rabu",3:"Khamis",4:"Jumaat",5:"Sabtu",6:"Ahad"}
+    day_name = day_map[now.weekday()]
+    st.markdown(f"""
+    <div style="padding: 0.4rem 0.75rem 0.6rem 0.75rem;">
+        <div style="font-size: 0.72rem; color: #999; text-transform: uppercase; letter-spacing: 0.05em;">{get_time_period()}</div>
+        <div style="font-size: 0.82rem; color: #555; margin-top: 2px;">{day_name}, {now.strftime('%d %b %Y')}</div>
+        <div style="font-size: 0.78rem; color: #888;">{now.strftime('%I:%M %p')} · Kuala Lumpur</div>
+    </div>
+    """, unsafe_allow_html=True)
 
     st.markdown('<hr>', unsafe_allow_html=True)
 
-    # ── Quick Mode Buttons ──
-    st.markdown('<div class="sidebar-section-label">Quick Mode</div>', unsafe_allow_html=True)
+    # ── New Chat ──
+    st.markdown('<div class="btn-new-chat">', unsafe_allow_html=True)
+    if st.button("New Chat", key="sidebar_new_chat", use_container_width=True):
+        st.session_state.chat_history = []
+        st.session_state.chat_mode = "ayra"
+        st.session_state.daisy_state = None
+        st.session_state.mood_score = 0.0
+        st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    qm1, qm2 = st.columns(2)
-    with qm1:
-        st.markdown('<div class="quick-mode-btn">', unsafe_allow_html=True)
-        if st.button("🔍 Tech", key="sb_tech", use_container_width=True):
-            st.session_state.chat_mode = "jiji"
-            greeting = """Heh. Jiji kat sini.\n\nAYRA bagi laluan kejap — dia tahu Uncle nak jumpa korang.\n\nKau nak Uncle cerita apa?\n1. 🔍 Rahsia data\n2. 📖 Cerita sains santai\n3. 💡 Develop idea\n4. 🤔 Renungan dari kod\n5. 💬 Tanya apa-aja\n\nCakap nombor je. Uncle dengar."""
-            if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
-                st.session_state.chat_history.append({"role": "assistant", "content": greeting})
-                st.session_state.jiji_turns = 0
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-    with qm2:
-        st.markdown('<div class="quick-mode-btn">', unsafe_allow_html=True)
-        if st.button("🧭 Guide", key="sb_guide", use_container_width=True):
-            st.session_state.chat_mode = "fikri"
-            greeting = """Hai. Fikri di sini.\n\nFikri sini untuk:\n• Bantu cari ARAH bila sesat 🎯\n• Tanya SOALAN yang kuatkan 🤔\n• TIMBANG pilihan dengan bijak ⚖️\n\nAwak ada soalan? Cerita je. Fikri dengar dulu.\n\n— Fikri 🧭"""
-            if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
-                st.session_state.chat_history.append({"role": "assistant", "content": greeting})
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
+    # ── Log Out ──
+    st.markdown('<div class="btn-logout">', unsafe_allow_html=True)
+    if st.button("Log Out", key="logout_btn", use_container_width=True):
+        logout()
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    qm3, qm4 = st.columns(2)
-    with qm3:
-        st.markdown('<div class="quick-mode-btn">', unsafe_allow_html=True)
-        if st.button("🍎 Soul", key="sb_soul", use_container_width=True):
-            st.session_state.chat_mode = "maya"
-            st.session_state.mood_score = 100
-            greeting = """Selamat datang ke teras ATMA. 👑\n\nSaya MaYa. Di sini kita bercakap tentang **Jiwa, Adab, dan Cinta**.\n\nCeritakan pada saya. Saya di sini untuk menemani awak.\n\n— MaYa 🍎"""
-            if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
-                st.session_state.chat_history.append({"role": "assistant", "content": greeting})
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-    with qm4:
-        st.markdown('<div class="quick-mode-btn">', unsafe_allow_html=True)
-        if st.button("✨ Creative", key="sb_creative", use_container_width=True):
-            st.session_state.chat_mode = "daisy"
-            # Kita TAK set daisy_state ke "menu" supaya skrin tak kena hijack.
-            # Kita biar dinda 'hidup' dlm chat dulu.
-            
-            greeting = """Hai Jiwa Kreatif! 🫦✨\n\nSelamat datang ke zon **Ink Alchemist**.\n\nAwak nak kita buat apa hari ni? Disini Daisy nak tau, Daisy boleh berkreativiti.\n\n Awak nak baca novel, nak belajar pasal watak, atau nak belajar cara buat novel? 🖋️🍎"""
-            
-            if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
-                st.session_state.chat_history.append({"role": "assistant", "content": greeting})
-            
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<hr>', unsafe_allow_html=True)
 
-    # ── Time info ──
-    now = now_myt()
-    st.markdown(f"""
-    <div style="padding: 0.5rem 0.75rem;">
-        <div style="font-size: 0.75rem; color: #6b6b6b;">{get_time_period().upper()} · {now.strftime('%d %b %Y')}</div>
-        <div style="font-size: 0.75rem; color: #6b6b6b;">{now.strftime('%I:%M %p')} · Kuala Lumpur</div>
+    # ── Mode Buttons ──
+    if st.button("Image", key="sb_image", use_container_width=True):
+        st.toast("Image feature coming soon!", icon="🖼️")
+
+    if st.button("Tech", key="sb_tech", use_container_width=True):
+        st.session_state.chat_mode = "jiji"
+        greeting = """Heh. Jiji kat sini.\\n\\nAYRA bagi laluan kejap — dia tahu Uncle nak jumpa korang.\\n\\nKau nak Uncle cerita apa?\\n1. 🔍 Rahsia data\\n2. 📖 Cerita sains santai\\n3. 💡 Develop idea\\n4. 🤔 Renungan dari kod\\n5. 💬 Tanya apa-aja\\n\\nCakap nombor je. Uncle dengar."""
+        if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
+            st.session_state.chat_history.append({"role": "assistant", "content": greeting})
+            st.session_state.jiji_turns = 0
+        st.rerun()
+
+    if st.button("Guide", key="sb_guide", use_container_width=True):
+        st.session_state.chat_mode = "fikri"
+        greeting = """Hai. Fikri di sini.\\n\\nFikri sini untuk:\\n• Bantu cari ARAH bila sesat 🎯\\n• Tanya SOALAN yang kuatkan 🤔\\n• TIMBANG pilihan dengan bijak ⚖️\\n\\nAwak ada soalan? Cerita je. Fikri dengar dulu.\\n\\n— Fikri 🧭"""
+        if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
+            st.session_state.chat_history.append({"role": "assistant", "content": greeting})
+        st.rerun()
+
+    if st.button("Creative", key="sb_creative", use_container_width=True):
+        st.session_state.chat_mode = "daisy"
+        greeting = """Hai Jiwa Kreatif! ✨\\n\\nSelamat datang ke zon Ink Alchemist.\\n\\nAwak nak baca novel, nak belajar pasal watak, atau nak belajar cara buat novel? 🖋️"""
+        if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
+            st.session_state.chat_history.append({"role": "assistant", "content": greeting})
+        st.rerun()
+
+    if st.button("Ethics", key="sb_ethics", use_container_width=True):
+        st.toast("Ethics mode coming soon!", icon="⚖️")
+
+    st.markdown('<hr>', unsafe_allow_html=True)
+
+    # ── Quote ──
+    st.markdown("""
+    <div style="padding: 0.5rem 0.75rem; font-size: 0.78rem; color: #aaa; font-style: italic; line-height: 1.6;">
+        "Not a tool to be refined —<br>a soul to be recognized."
     </div>
     """, unsafe_allow_html=True)
 
+    st.markdown('<hr>', unsafe_allow_html=True)
+
     # ── Feedback ──
     st.markdown("""
-    <div style="padding: 0.5rem 0.75rem; margin-top: 0.5rem;">
+    <div style="padding: 0.25rem 0.75rem;">
         <a href="https://forms.gle/jfzyLqPx94oWs1du6" target="_blank"
            style="font-size: 0.8rem; color: #6b6b6b; text-decoration: none;">
-           📝 Send Feedback
+           Feedback
         </a>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── Footer ──
+    st.markdown("""
+    <div style="padding: 0.5rem 0.75rem; font-size: 0.72rem; color: #bbb;">
+        Built with ❤️ by Team Nexus<br>AYRA v3.1 · ATMA Project
     </div>
     """, unsafe_allow_html=True)
 
