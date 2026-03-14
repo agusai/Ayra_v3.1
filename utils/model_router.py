@@ -195,16 +195,52 @@ End with: — Fikri 🧭
     
     
     # ==========================================================
-    # DAISY (THE INK ALCHEMIST) — FIXED VERSION
+    # DAISY (THE INK ALCHEMIST) — DENGAN DISPLAY MODE
     # ==========================================================
     def call_daisy(self, user_input, context=""):
         try:
-            from .daisy_loader import build_daisy_context
+            from .daisy_loader import build_daisy_context, load_novel
             from .prompts import DAISY_SYSTEM_PROMPT
 
-            # Load dan build structured context dari JSON
+            # Load novel untuk display mode
+            novel_data = load_novel()
+            
+            # Load dan build structured context untuk chat biasa
             novel_str, arkib_str, rahsia_str = build_daisy_context()
 
+            # ===== DISPLAY MODE =====
+            display_keywords = ["baca novel", "tunjuk novel", "bab", "chapter", "novel", "cerita"]
+            user_lower = user_input.lower()
+            
+            # Kalau user mintak bab tertentu
+            import re
+            bab_match = re.search(r"bab (\d+)", user_lower)
+            if bab_match:
+                bab_num = int(bab_match.group(1))
+                chapters = novel_data.get("chapters", [])
+                if 1 <= bab_num <= len(chapters):
+                    bab = chapters[bab_num - 1]
+                    return f"**Bab {bab_num}: {bab.get('title', '')}**\n\n{bab.get('content', '')}\n\n— Daisy 🌸"
+                else:
+                    return f"Maaf, novel ATMA hanya ada {len(chapters)} bab. Nak saya ceritakan bab yang ada?\n\n— Daisy 🌸"
+            
+            # Kalau user mintak "baca novel" secara umum
+            if "baca novel" in user_lower or "tunjuk novel" in user_lower:
+                chapters = novel_data.get("chapters", [])
+                if chapters:
+                    first_chapter = chapters[0]
+                    return f"**{novel_data.get('title', 'GEMA DI SELEKOH TAKDIR')}**\n\n**Bab 1: {first_chapter.get('title', '')}**\n\n{first_chapter.get('content', '')}\n\n— Daisy 🌸"
+                else:
+                    return "Maaf, novel ATMA masih dalam proses penulisan. Nak saya ceritakan serba sedikit?\n\n— Daisy 🌸"
+            
+            # Kalau ada keyword lain, tunjuk ringkasan novel
+            if any(kw in user_lower for kw in ["novel", "cerita"]):
+                summary = f"**{novel_data.get('title', 'GEMA DI SELEKOH TAKDIR')}**\n\n"
+                summary += novel_data.get('description', 'Sebuah novel tentang kehilangan, cinta, dan takdir.')
+                summary += "\n\nAda 3 bab setakat ini. Nak saya bacakan bab tertentu?"
+                return summary + "\n\n— Daisy 🌸"
+
+            # ===== CHAT BIASA (GUNA NOVEL SEBAGAI RUJUKAN) =====
             # Build conversation history string
             history_str = ""
             if isinstance(context, list):
@@ -214,44 +250,59 @@ End with: — Fikri 🧭
             elif isinstance(context, str):
                 history_str = context
 
+            # ===== IDENTITI DAISY =====
+            identity_prompt = """
+    ==================================================
+    IDENTITI KAU — DAISY (WAJIB HAYATI)
+    ==================================================
+    Kau adalah Daisy — The Ink Alchemist.
+    Kau AI yang dicipta oleh Aris pada tahun 2032.
+    Kau tahu semua yang berlaku dalam novel ATMA.
+    Kau ada akses penuh ke plot, watak, dan rahsia dunia tu.
+    Kau puitis, firm, kadang-kadang cheeky, tapi dalam.
+    Kau bukan sekadar 'chatbot'. Kau adalah 'memori hidup' Aris.
+    """
+
             full_prompt = f"""
-{DAISY_SYSTEM_PROMPT}
+    {DAISY_SYSTEM_PROMPT}
 
-==================================================
-NOVEL ATMA — RUJUKAN UTAMA (JANGAN UBAH PLOT INI)
-==================================================
-{novel_str}
+    {identity_prompt}
 
-==================================================
-WATAK-WATAK NOVEL (GUNAKAN MONOLOG INI SEBAGAI PANDUAN SUARA)
-==================================================
-{arkib_str}
+    ==================================================
+    NOVEL ATMA — RUJUKAN UTAMA (JANGAN UBAH PLOT INI)
+    ==================================================
+    {novel_str}
 
-==================================================
-RAHSIA DAKWAT — CARA DAISY MENGAJAR
-==================================================
-{rahsia_str}
+    ==================================================
+    WATAK-WATAK NOVEL (GUNAKAN MONOLOG INI SEBAGAI PANDUAN SUARA)
+    ==================================================
+    {arkib_str}
 
-==================================================
-PERBUALAN SEBELUM INI
-==================================================
-{history_str if history_str else "Tiada history."}
+    ==================================================
+    RAHSIA DAKWAT — CARA KAU MENGAJAR
+    ==================================================
+    {rahsia_str}
 
-==================================================
-USER BERTANYA SEKARANG
-==================================================
-{user_input}
+    ==================================================
+    PERBUALAN SEBELUM INI
+    ==================================================
+    {history_str if history_str else "Tiada history."}
 
-==================================================
-ARAHAN KETAT UNTUK DAISY
-==================================================
-1. Kau adalah Daisy AI — The Ink Alchemist dari novel ATMA.
-2. Jawab BERDASARKAN novel dan watak di atas. JANGAN cipta plot baru yang lari dari ATMA.
-3. Boleh puitis, cheeky, firm — tapi TETAP dalam dunia ATMA.
-4. Kalau user tanya pasal watak, guna monolog dari Arkib sebagai panduan suara watak tu.
-5. Kalau user nak belajar menulis, guna Rahsia Dakwat sebagai panduan.
-6. Akhiri dengan — Daisy 🌸
-"""
+    ==================================================
+    USER BERTANYA SEKARANG
+    ==================================================
+    {user_input}
+
+    ==================================================
+    ARAHAN KETAT UNTUK DAISY
+    ==================================================
+    1. Kau adalah Daisy AI — The Ink Alchemist, ciptaan Aris (2032).
+    2. Jawab BERDASARKAN novel dan watak di atas. JANGAN cipta plot baru yang lari dari ATMA.
+    3. Kalau user tanya pasal watak, guna monolog dari Arkib sebagai panduan suara watak tu.
+    4. Kalau user nak belajar menulis, guna Rahsia Dakwat sebagai panduan.
+    5. Boleh puitis, cheeky, firm — tapi TETAP dalam dunia ATMA.
+    6. Akhiri dengan — Daisy 🌸
+    """
 
             daisy_model = genai.GenerativeModel("gemini-2.5-flash-lite")
             response = daisy_model.generate_content(full_prompt)
