@@ -266,7 +266,7 @@ st.markdown("""
         border-radius: 10px !important;
         font-weight: 600 !important;
         box-shadow: 0 2px 8px rgba(16,163,127,0.25) !important;
-        text-align: center !important;
+        text-align: left !important;
     }
 
     .btn-new-chat button:hover {
@@ -280,7 +280,7 @@ st.markdown("""
         color: #666 !important;
         border: none !important;
         border-radius: 10px !important;
-        text-align: center !important;
+        text-align: left !important;
     }
 
     .btn-search button:hover {
@@ -297,8 +297,8 @@ st.markdown("""
         font-size: 0.82rem !important;
         font-weight: 500 !important;
         padding: 0.45rem 0.3rem !important;
-        text-align: center !important;
-        justify-content: center !important;
+        text-align: left !important;
+        justify-content: left !important;
         transition: all 0.15s ease;
         box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
         margin-bottom: 0.05rem !important;
@@ -313,7 +313,7 @@ st.markdown("""
 
     .quick-mode-btn button p,
     .quick-mode-btn button div {
-        text-align: center !important;
+        text-align: left !important;
         width: 100% !important;
     }
 
