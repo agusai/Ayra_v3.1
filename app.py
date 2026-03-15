@@ -700,7 +700,11 @@ with st.sidebar:
         st.rerun()
 
     if st.button("Ethics", key="sb_ethics", use_container_width=True):
-        st.toast("Ethics mode coming soon!", icon="⚖️")
+        st.session_state.chat_mode = "maya"
+        greeting = """Salam. Maya di sini.\\n\\nMaya di sini untuk berbincang tentang ETIKA dan PERSOALAN KEMANUSIAAN dalam dunia teknologi.\\n\\nApa yang bermain di fikiran awak?\\n\\n— Maya 🍎"""
+        if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
+            st.session_state.chat_history.append({"role": "assistant", "content": greeting})
+        st.rerun()
 
     st.markdown('<hr>', unsafe_allow_html=True)
 
