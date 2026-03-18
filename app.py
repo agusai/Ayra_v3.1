@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 import threading
 from zoneinfo import ZoneInfo
+from utils.styles import get_css
 
 MYT = ZoneInfo("Asia/Kuala_Lumpur")
 
@@ -45,11 +46,11 @@ if not is_logged_in():
 # -------------------------------------------------------------------
 def get_time_period():
     hour = now_myt().hour
-    if 5 <= hour < 12: return "pagi"
-    elif 12 <= hour < 15: return "tengah hari"
-    elif 15 <= hour < 19: return "petang"
-    elif 19 <= hour < 22: return "malam"
-    else: return "lewat malam"
+    if 5 <= hour < 12: return "morning"
+    elif 12 <= hour < 15: return "afternoon"
+    elif 15 <= hour < 19: return "evening"
+    elif 19 <= hour < 22: return "night"
+    else: return "late night"
 
 # -------------------------------------------------------------------
 # Initialise components (per user)
@@ -93,540 +94,15 @@ if "active_world" not in st.session_state:
 if "novel_chapter" not in st.session_state:
     st.session_state.novel_chapter = 0
 
-st.markdown("""
-<style>
-    /* ===== AYRA 3.3 — WARM PREMIUM UI ===== */
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-
-    * { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; }
-
-    /* ===== GLOBAL WARM BG ===== */
-    .stApp {
-        background-color: #faf9f7 !important;
-        color: #1c1c1c !important;
-    }
-
-    /* Hide streamlit default chrome */
-    #MainMenu { visibility: hidden; }
-    header[data-testid="stHeader"] { background: transparent !important; }
-    footer { visibility: hidden !important; }
-
-    /* ===== MAIN CONTENT AREA ===== */
-    .main .block-container {
-        max-width: 780px !important;
-        padding: 2rem 1.5rem 6rem 1.5rem !important;
-        margin: 0 auto !important;
-    }
-
-    /* ===== HEADER ===== */
-    .ayra-banner {
-        text-align: center;
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: #1c1c1c;
-        margin-top: 2rem;
-        margin-bottom: 0.4rem;
-        letter-spacing: -0.8px;
-    }
-
-    .proactive-greeting {
-        text-align: center;
-        font-size: 0.875rem;
-        color: #888;
-        margin-bottom: 2.5rem;
-        display: block;
-        font-weight: 400;
-    }
-
-    .greeting-container {
-        text-align: center;
-    }
-
-    /* ===== CHAT MESSAGES ===== */
-    .user-message {
-        display: flex;
-        justify-content: flex-end;
-        margin: 1rem 0;
-    }
-
-    .user-message-bubble {
-        background-color: #f0ede8;
-        color: #1c1c1c;
-        border-radius: 20px 20px 4px 20px;
-        padding: 13px 18px;
-        max-width: 72%;
-        font-size: 0.95rem;
-        line-height: 1.65;
-        border: none;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    }
-
-    .ayra-message {
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-        margin: 1rem 0;
-        gap: 12px;
-    }
-
-    .ayra-avatar {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #10a37f, #0d8c6d);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.95rem;
-        flex-shrink: 0;
-        margin-top: 2px;
-        box-shadow: 0 2px 6px rgba(16,163,127,0.25);
-    }
-
-    .ayra-message-bubble {
-        background-color: transparent;
-        color: #1c1c1c;
-        padding: 6px 4px;
-        max-width: 82%;
-        font-size: 0.95rem;
-        line-height: 1.75;
-    }
-
-    /* ===== SIDEBAR ===== */
-    [data-testid="stSidebar"] {
-        background-color: #f2f0ec !important;
-        border-right: none !important;
-        box-shadow: 1px 0 12px rgba(0,0,0,0.05) !important;
-    }
-
-    [data-testid="stSidebar"] > div {
-        padding: 0.75rem 0.65rem !important;
-    }
-
-    /* Sidebar brand */
-    .sidebar-brand {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 0.5rem 0.5rem;
-        margin-bottom: 0.4rem;
-    }
-
-    .sidebar-brand-icon {
-        font-size: 1.2rem;
-    }
-
-    .sidebar-brand-name {
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: #1c1c1c;
-        letter-spacing: -0.5px;
-    }
-
-    /* Sidebar section label */
-    .sidebar-section-label {
-        font-size: 0.68rem;
-        font-weight: 600;
-        color: #999;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        padding: 0.3rem 0.5rem;
-        margin-top: 0.3rem;
-        margin-bottom: 0.2rem;
-    }
-
-    /* All sidebar stButton — base */
-    [data-testid="stSidebar"] .stButton button {
-        background-color: transparent !important;
-        color: #2c2c2c !important;
-        border: none !important;
-        border-radius: 10px !important;
-        padding: 0.45rem 0.65rem !important;
-        font-size: 0.855rem !important;
-        font-weight: 500 !important;
-        width: 100%;
-        text-align: left !important;
-        transition: background 0.15s ease;
-        margin-bottom: 0.05rem !important;
-    }
-
-    [data-testid="stSidebar"] .stButton button:hover {
-        background-color: rgba(0,0,0,0.06) !important;
-    }
-
-    [data-testid="stSidebar"] .stButton {
-        margin-bottom: 0.05rem !important;
-    }
-
-    /* New Chat button */
-    .btn-new-chat button {
-        background: linear-gradient(135deg, #10a37f, #0d8c6d) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 10px !important;
-        font-weight: 600 !important;
-        box-shadow: 0 2px 8px rgba(16,163,127,0.25) !important;
-        text-align: left !important;
-    }
-
-    .btn-new-chat button:hover {
-        background: linear-gradient(135deg, #0d8c6d, #0b7a5e) !important;
-        box-shadow: 0 3px 12px rgba(16,163,127,0.35) !important;
-    }
-
-    /* Search button */
-    .btn-search button {
-        background-color: rgba(0,0,0,0.04) !important;
-        color: #666 !important;
-        border: none !important;
-        border-radius: 10px !important;
-        text-align: left !important;
-    }
-
-    .btn-search button:hover {
-        background-color: rgba(0,0,0,0.08) !important;
-        color: #1c1c1c !important;
-    }
-
-    /* Quick mode buttons — CENTER aligned chip style */
-    .quick-mode-btn button {
-        background-color: #ffffff !important;
-        border: 1px solid #e2dfd9 !important;
-        border-radius: 10px !important;
-        color: #2c2c2c !important;
-        font-size: 0.82rem !important;
-        font-weight: 500 !important;
-        padding: 0.45rem 0.3rem !important;
-        text-align: left !important;
-        justify-content: left !important;
-        transition: all 0.15s ease;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
-        margin-bottom: 0.05rem !important;
-    }
-
-    .quick-mode-btn button:hover {
-        background-color: #e8f5f0 !important;
-        border-color: #10a37f !important;
-        color: #0d8c6d !important;
-        box-shadow: 0 2px 6px rgba(16,163,127,0.15) !important;
-    }
-
-    .quick-mode-btn button p,
-    .quick-mode-btn button div {
-        text-align: left !important;
-        width: 100% !important;
-    }
-
-    /* ===== CHAT INPUT AREA ===== */
-    .stChatInputContainer {
-        background: transparent !important;
-        border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    [data-testid="stChatInput"] {
-        background-color: #ffffff !important;
-        border: 1px solid #e2dfd9 !important;
-        border-radius: 18px !important;
-        color: #1c1c1c !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.07) !important;
-    }
-
-    [data-testid="stChatInput"] textarea {
-        background-color: #ffffff !important;
-        color: #1c1c1c !important;
-        font-size: 0.95rem !important;
-        padding: 13px 18px !important;
-    }
-
-    [data-testid="stChatInput"] textarea::placeholder {
-        color: #bbb !important;
-    }
-
-    /* ===== FILE UPLOADER compact ===== */
-    [data-testid="stFileUploader"] {
-        background-color: #ffffff !important;
-        border: 1px dashed #ddd !important;
-        border-radius: 10px !important;
-    }
-
-    [data-testid="stFileUploader"] label {
-        color: #888 !important;
-        font-size: 0.8rem !important;
-    }
-
-    /* ===== EXPANDERS ===== */
-    .streamlit-expanderHeader {
-        background-color: #ffffff !important;
-        border: 1px solid #e8e5e0 !important;
-        color: #1c1c1c !important;
-        border-radius: 10px !important;
-    }
-
-    .streamlit-expanderContent {
-        background-color: #faf9f7 !important;
-        border: 1px solid #e8e5e0 !important;
-        color: #1c1c1c !important;
-    }
-
-    /* ===== SCROLLBAR ===== */
-    ::-webkit-scrollbar { width: 4px; height: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #d5d0c8; border-radius: 4px; }
-
-    /* ===== MISC ===== */
-    hr {
-        border: none !important;
-        border-top: 1px solid #e8e5e0 !important;
-        margin: 0.6rem 0 !important;
-    }
-
-    .stRadio label, .stSelectbox label { color: #1c1c1c !important; }
-    .stRadio [data-testid="stWidgetLabel"] { color: #888 !important; font-size: 0.8rem !important; }
-
-    .stAlert {
-        background-color: #f5f3ef !important;
-        border: 1px solid #e8e5e0 !important;
-        color: #1c1c1c !important;
-        border-radius: 10px !important;
-    }
-
-    [data-testid="stMetric"] {
-        background-color: #ffffff !important;
-        border: 1px solid #e8e5e0 !important;
-        border-radius: 12px !important;
-        padding: 0.75rem !important;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
-    }
-    [data-testid="stMetric"] label { color: #888 !important; font-size: 0.72rem !important; }
-    [data-testid="stMetric"] [data-testid="stMetricValue"] { color: #1c1c1c !important; font-size: 0.9rem !important; }
-
-    .stApp h1, .stApp h2, .stApp h3 { color: #1c1c1c !important; }
-    .stMarkdown { color: #1c1c1c; }
-
-    /* ===== HIDE SIDEBAR COLLAPSE BUTTON TEXT ===== */
-    [data-testid="collapsedControl"] span,
-    button[data-testid="baseButton-headerNoPadding"] span,
-    [data-testid="stSidebarCollapseButton"] span,
-    [data-testid="stSidebarCollapsedControl"] span {
-        display: none !important;
-    }
-    [data-testid="stSidebar"] ~ div button span,
-    .st-emotion-cache-1dp5vir span { display: none !important; }
-
-    /* ===== MOBILE RESPONSIVE ===== */
-    @media (max-width: 768px) {
-        .main .block-container {
-            padding: 1rem 0.75rem 5rem 0.75rem !important;
-        }
-        .quick-mode-btn button {
-            font-size: 0.78rem !important;
-            padding: 0.4rem 0.2rem !important;
-        }
-        [data-testid="stSidebar"] > div {
-            padding: 0.5rem 0.4rem !important;
-        }
-        [data-testid="stSidebar"] .stButton button {
-            padding: 0.4rem 0.5rem !important;
-            font-size: 0.82rem !important;
-        }
-        .user-message-bubble {
-            max-width: 88% !important;
-        }
-        .ayra-message-bubble {
-            max-width: 92% !important;
-        }
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# -------------------------------------------------------------------
-# FIX: Check if in Daisy mode FIRST, before displaying normal UI
-# -------------------------------------------------------------------
-if st.session_state.daisy_state is not None:
-    # FIX: Import at top of Daisy section to avoid circular imports
-    
-    # ============================================================
-    # DUNIA DAISY - FULL SCREEN MODE
-    # ============================================================
-    
-    # Display Daisy banner
-    st.markdown('<div class="ayra-banner">🌸 DUNIA DAISY</div>', unsafe_allow_html=True)
-    st.markdown('<div class="greeting-container"><div class="proactive-greeting">The Ink Alchemist\'s Realm</div></div>', unsafe_allow_html=True)
-    
-    # MENU STATE
-    if st.session_state.daisy_state == "menu":
-        st.markdown("""
-        <div style="text-align: center; margin: 2rem 0;">
-            <h3 style="color: #e0e0e0; font-style: italic; margin-top: 0;">The Ink Alchemist</h3>
-            <div style="width: 100px; height: 2px; background: linear-gradient(90deg, transparent, #d4af37, transparent); margin: 1rem auto;"></div>
-            <p style="max-width: 600px; margin: 0 auto; color: #a0a0a0;">
-                "Di antara dakwat dan takdir, aku menulis untuk mereka yang tak bersuara."
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Pilihan dengan description
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            st.markdown("""
-            <div style="background: rgba(212,175,55,0.05); border-radius: 15px; padding: 1.5rem; height: 200px; border: 1px solid rgba(212,175,55,0.2); text-align: center;">
-                <span style="font-size: 2.5rem;">📖</span>
-                <h3 style="color: #d4af37; margin: 0.5rem 0;">Naskhah ATMA</h3>
-                <p style="color: #a0a0a0; font-size: 0.9rem;">Novel yang ditulis Daisy – kisah cinta, kehilangan, dan pertemuan antara dimensi.</p>
-            </div>
-            """, unsafe_allow_html=True)
-            if st.button("📖 Baca Naskhah", key="daisy_novel_menu", use_container_width=True):
-                st.session_state.daisy_state = "novel"
-                st.rerun()
-        
-        with col2:
-            st.markdown("""
-            <div style="background: rgba(212,175,55,0.05); border-radius: 15px; padding: 1.5rem; height: 200px; border: 1px solid rgba(212,175,55,0.2); text-align: center;">
-                <span style="font-size: 2.5rem;">💎</span>
-                <h3 style="color: #d4af37; margin: 0.5rem 0;">Arkib Memori</h3>
-                <p style="color: #a0a0a0; font-size: 0.9rem;">Monolog watak-watak dari alam Daisy – setiap satu ada cerita tersendiri.</p>
-            </div>
-            """, unsafe_allow_html=True)
-            if st.button("💎 Teroka Arkib", key="daisy_arkib_menu", use_container_width=True):
-                st.session_state.daisy_state = "arkib"
-                st.rerun()
-        
-        with col3:
-            st.markdown("""
-            <div style="background: rgba(212,175,55,0.05); border-radius: 15px; padding: 1.5rem; height: 200px; border: 1px solid rgba(212,175,55,0.2); text-align: center;">
-                <span style="font-size: 2.5rem;">⚗️</span>
-                <h3 style="color: #d4af37; margin: 0.5rem 0;">Rahsia Dakwat</h3>
-                <p style="color: #a0a0a0; font-size: 0.9rem;">Pelajaran menulis dari Daisy – untuk mereka yang nak belajar 'The Ink Alchemist' way.</p>
-            </div>
-            """, unsafe_allow_html=True)
-            if st.button("⚗️ Belajar Rahsia", key="daisy_rahsia_menu", use_container_width=True):
-                st.session_state.daisy_state = "rahsia"
-                st.rerun()
-        
-        # Back button
-        st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🔙 Kembali ke AYRA", key="back_to_ayra_menu", use_container_width=True):
-            st.session_state.daisy_state = None
-            st.rerun()
-        
-        st.stop()
-    
-    # NOVEL STATE
-    elif st.session_state.daisy_state == "novel":
-        novel = load_novel()
-        chapters = novel['chapters']
-        current = st.session_state.novel_chapter
-        
-        # Display current chapter
-        st.markdown(f"""
-        <div style="text-align: center; margin: 2rem 0 1rem 0;">
-            <span style="font-size: 2rem;">📖</span>
-            <h2 style="color: #d4af37; font-family: 'Playfair Display', serif; margin: 0;">{chapters[current]['title']}</h2>
-            <p style="color: #a0a0a0; font-style: italic;">Bab {current + 1} dari {len(chapters)}</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Chapter content
-        st.markdown(f"""
-        <div style="background: rgba(10,26,43,0.6); border-radius: 15px; padding: 2rem; border: 1px solid rgba(212,175,55,0.2); line-height: 1.8; font-size: 1.1rem;">
-            {chapters[current]['content']}
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Navigation
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col1:
-            if current > 0:
-                if st.button("⏮️ Sebelum", key="novel_prev", use_container_width=True):
-                    st.session_state.novel_chapter -= 1
-                    st.rerun()
-        with col2:
-            if st.button("🔙 Menu Daisy", key="novel_menu", use_container_width=True):
-                st.session_state.daisy_state = "menu"
-                st.rerun()
-        with col3:
-            if current < len(chapters) - 1:
-                if st.button("Seterusnya ⏭️", key="novel_next", use_container_width=True):
-                    st.session_state.novel_chapter += 1
-                    st.rerun()
-        
-        st.stop()
-    
-    # ARKIB STATE
-    elif st.session_state.daisy_state == "arkib":
-        arkib = load_arkib()
-        
-        st.markdown(f"""
-        <div style="text-align: center; margin: 2rem 0 1rem 0;">
-            <span style="font-size: 2rem;">💎</span>
-            <h2 style="color: #d4af37; font-family: 'Playfair Display', serif; margin: 0;">Arkib Memori</h2>
-            <p style="color: #a0a0a0; font-style: italic;">Suara-suara dari alam Daisy</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Character selector
-        character_names = [c['name'] for c in arkib['characters']]
-        selected_char = st.selectbox("Pilih watak:", character_names, key="arkib_char_select")
-        
-        # Find selected character
-        character = next(c for c in arkib['characters'] if c['name'] == selected_char)
-        
-        # Display character info
-        st.markdown(f"""
-        <div style="background: rgba(212,175,55,0.05); border-radius: 15px; padding: 1.5rem; margin: 1rem 0; border: 1px solid rgba(212,175,55,0.2);">
-            <h3 style="color: #d4af37; margin: 0;">{character['name']}</h3>
-            <p style="color: #a0a0a0; font-style: italic; margin-top: 0;">{character['role']}</p>
-            <div style="margin-top: 1rem;">{character['monologues'][0]['content']}</div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        if st.button("🔙 Menu Daisy", key="arkib_menu", use_container_width=True):
-            st.session_state.daisy_state = "menu"
-            st.rerun()
-        
-        st.stop()
-    
-    # RAHSIA STATE
-    elif st.session_state.daisy_state == "rahsia":
-        rahsia = load_rahsia()
-        
-        st.markdown(f"""
-        <div style="text-align: center; margin: 2rem 0 1rem 0;">
-            <span style="font-size: 2rem;">⚗️</span>
-            <h2 style="color: #d4af37; font-family: 'Playfair Display', serif; margin: 0;">Rahsia Dakwat</h2>
-            <p style="color: #a0a0a0; font-style: italic;">Pelajaran menulis dari The Ink Alchemist</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Lesson selector
-        lesson_titles = [l['title'] for l in rahsia['lessons']]
-        selected_lesson = st.selectbox("Pilih pelajaran:", lesson_titles, key="rahsia_lesson_select")
-        
-        # Find selected lesson
-        lesson = next(l for l in rahsia['lessons'] if l['title'] == selected_lesson)
-        
-        # Display lesson
-        st.markdown(f"""
-        <div style="background: rgba(10,26,43,0.6); border-radius: 15px; padding: 2rem; border: 1px solid rgba(212,175,55,0.2); line-height: 1.8;">
-            {lesson['content']}
-        </div>
-        """, unsafe_allow_html=True)
-        
-        if st.button("🔙 Menu Daisy", key="rahsia_menu", use_container_width=True):
-            st.session_state.daisy_state = "menu"
-            st.rerun()
-        
-        st.stop()
-
 # -------------------------------------------------------------------
 # NORMAL AYRA MODE - Display header
 # -------------------------------------------------------------------
 st.markdown('<div class="ayra-banner">AYRA</div>', unsafe_allow_html=True)
 proactive_msg = get_greeting()
 st.markdown(f'<div class="greeting-container"><div class="proactive-greeting">{proactive_msg}</div></div>', unsafe_allow_html=True)
+
+# Load CSS dari fail berasingan
+st.markdown(get_css(), unsafe_allow_html=True)
 
 # -------------------------------------------------------------------
 # Sidebar
@@ -643,7 +119,7 @@ with st.sidebar:
 
     # ── Date Time Weather ──
     now = now_myt()
-    day_map = {0:"Isnin",1:"Selasa",2:"Rabu",3:"Khamis",4:"Jumaat",5:"Sabtu",6:"Ahad"}
+    day_map = {0:"Monday",1:"Tuesday",2:"Wednesday",3:"Thursday",4:"Friday",5:"Saturday",6:"Sunday"}
     day_name = day_map[now.weekday()]
     st.markdown(f"""
     <div style="padding: 0.4rem 0.75rem 0.6rem 0.75rem;">
@@ -679,7 +155,7 @@ with st.sidebar:
 
     if st.button("Tech", key="sb_tech", use_container_width=True):
         st.session_state.chat_mode = "jiji"
-        greeting = """Heh. Jiji kat sini.\\n\\nAYRA bagi laluan kejap — dia tahu Uncle nak jumpa korang.\\n\\nKau nak Uncle cerita apa?\\n1. 🔍 Rahsia data\\n2. 📖 Cerita sains santai\\n3. 💡 Develop idea\\n4. 🤔 Renungan dari kod\\n5. 💬 Tanya apa-aja\\n\\nCakap nombor je. Uncle dengar."""
+        greeting = """Heh. Jiji di sini.\n\nAYRA bagi laluan kejap — dia tahu Uncle nak jumpa korang. Kau nak Uncle cerita apa?\n1. 🔍 Rahsia data\n2. 📖 Cerita sains santai\n3. 💡 Develop idea\n4. 🤔 Renungan dari kod\n5. 💬 Tanya apa-aja\n\nCakap nombor je. Uncle dengar."""
         if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
             st.session_state.chat_history.append({"role": "assistant", "content": greeting})
             st.session_state.jiji_turns = 0
@@ -687,21 +163,21 @@ with st.sidebar:
 
     if st.button("Guide", key="sb_guide", use_container_width=True):
         st.session_state.chat_mode = "fikri"
-        greeting = """Hai. Fikri di sini.\\n\\nFikri sini untuk:\\n• Bantu cari ARAH bila sesat 🎯\\n• Tanya SOALAN yang kuatkan 🤔\\n• TIMBANG pilihan dengan bijak ⚖️\\n\\nAwak ada soalan? Cerita je. Fikri dengar dulu.\\n\\n— Fikri 🧭"""
+        greeting = """Hai. Fikri di sini.\n\nFikri sini untuk:\n\n• Bantu cari ARAH bila sesat 🎯\n\n• Tanya SOALAN yang kuatkan 🤔\n\n• TIMBANG pilihan dengan bijak ⚖️\n\nAwak ada soalan? Cerita je. Fikri dengar dulu.\n\n— Fikri 🧭"""
         if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
             st.session_state.chat_history.append({"role": "assistant", "content": greeting})
         st.rerun()
 
     if st.button("Creative", key="sb_creative", use_container_width=True):
         st.session_state.chat_mode = "daisy"
-        greeting = """Hai Jiwa Kreatif! ✨\\n\\nSelamat datang ke zon Ink Alchemist.\\n\\nAwak nak baca novel, nak belajar pasal watak, atau nak belajar cara buat novel? 🖋️"""
+        greeting = """Hai Jiwa Kreatif! ✨\n\nSelamat datang ke zon Ink Alchemist.\n\nAwak nak baca novel, nak belajar pasal watak, atau nak belajar cara buat novel? 🖋️"""
         if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
             st.session_state.chat_history.append({"role": "assistant", "content": greeting})
         st.rerun()
 
     if st.button("Ethics", key="sb_ethics", use_container_width=True):
         st.session_state.chat_mode = "maya"
-        greeting = """Salam. Maya di sini.\\n\\nMaya di sini untuk berbincang tentang ETIKA dan PERSOALAN KEMANUSIAAN dalam dunia teknologi.\\n\\nApa yang bermain di fikiran awak?\\n\\n— Maya 🍎"""
+        greeting = """Salam. Maya di sini.\n\nMaya di sini untuk berbincang tentang ETIKA dan PERSOALAN KEMANUSIAAN dalam dunia teknologi.\n\nApa yang bermain di fikiran awak?\n\n— Maya 🍎"""
         if not st.session_state.chat_history or st.session_state.chat_history[-1].get("content") != greeting:
             st.session_state.chat_history.append({"role": "assistant", "content": greeting})
         st.rerun()
